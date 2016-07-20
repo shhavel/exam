@@ -1,0 +1,6 @@
+<h2>Edit participation</h2>
+
+<%= render "form.html", changeset: @changeset,
+                        action: participation_path(@conn, :update, @participation) %>
+
+<a href="/">Back</a>

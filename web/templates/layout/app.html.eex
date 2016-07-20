@@ -9,6 +9,8 @@
 
     <title>Hello Exam!</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+    <script src="<%= static_path(@conn, "/js/jquery.min.js") %>"></script>
+    <script src="<%= static_path(@conn, "/js/underscore-min.js") %>"></script>
   </head>
 
   <body>
@@ -16,7 +18,8 @@
       <header class="header">
         <nav role="navigation">
           <ul class="nav nav-pills pull-right">
-            <li><a href="http://www.phoenixframework.org/docs">Get Started</a></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="/tests">Create Test</a></li>
           </ul>
         </nav>
         <span class="logo"></span>

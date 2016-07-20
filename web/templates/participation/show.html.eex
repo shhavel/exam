@@ -1,0 +1,41 @@
+<h2>Show participation</h2>
+
+<ul>
+
+  <li>
+    <strong>Test:</strong>
+    <%= @participation.test.name %>
+  </li>
+
+  <%= if Exam.Participation.finished?(@participation) do %>
+    <li>
+      <strong>State:</strong>
+      Finished
+    </li>
+
+    <li>
+      <strong>Evaluation:</strong>
+      <%= Exam.Participation.correct_replies_count(@participation) %> / <%= Exam.Participation.questions_count(@participation) %>
+    </li>
+
+    <li>
+      <strong>Score:</strong>
+      <%= Exam.Participation.score(@participation) %>
+    </li>
+  <% else %>
+    <li>
+      <strong>State:</strong>
+      Started
+    </li>
+
+    <li>
+      <strong>Progress:</strong>
+      <%= Exam.Participation.replies_count(@participation) %> / <%= Exam.Participation.questions_count(@participation) %>
+    </li>
+  <% end %>
+</ul>
+
+<%= unless Exam.Participation.finished?(@participation) do %>
+  <%= link "Continue", to: participation_path(@conn, :edit, @participation) %>
+<% end %>
+<a href="/">Back</a>

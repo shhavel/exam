@@ -1,0 +1,23 @@
+<h2>Show test</h2>
+
+<ul>
+
+  <li>
+    <strong>Locale:</strong>
+    <%= @test.locale %>
+  </li>
+
+  <li>
+    <strong>Category:</strong>
+    <%= @test.category %>
+  </li>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @test.name %>
+  </li>
+
+</ul>
+
+<%= link "Edit", to: test_path(@conn, :edit, @test) %>
+<%= link "Back", to: test_path(@conn, :index) %>

@@ -1,0 +1,33 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= hidden_input f, :test_id, class: "form-control" %>
+
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <%= inputs_for f, :replies, fn r -> %>
+    <%= hidden_input r, :question_id, class: "form-control" %>
+
+    <h4><%= r.model.question.text %></h4>
+
+    <%= inputs_for r, :opinions, fn o -> %>
+      <%= hidden_input o, :answer_id, class: "form-control" %>
+
+      <div class="form-group col-sm-offset-1 col-sm-11">
+        <div class="checkbox">
+          <label>
+            <%= checkbox o, :agree %>
+            <%= o.model.answer.text %>
+          </label>
+        </div>
+      </div>
+    <% end %>
+
+  <% end %>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>

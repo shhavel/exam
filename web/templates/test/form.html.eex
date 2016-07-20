@@ -1,0 +1,140 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <div class="form-group <%= if f.errors[:locale], do: "has-error" %>">
+    <%= label f, :locale, class: "control-label" %>
+    <%= text_input f, :locale, class: "form-control" %>
+    <%= error_tag f, :locale %>
+  </div>
+
+  <div class="form-group <%= if f.errors[:category], do: "has-error" %>">
+    <%= label f, :category, class: "control-label" %>
+    <%= text_input f, :category, class: "form-control" %>
+    <%= error_tag f, :category %>
+  </div>
+
+  <div class="form-group <%= if f.errors[:name], do: "has-error" %>">
+    <%= label f, :name, class: "control-label" %>
+    <%= text_input f, :name, class: "form-control" %>
+    <%= error_tag f, :name %>
+  </div>
+
+<div id="questionsContainer">
+<%= inputs_for f, :questions, fn q -> %>
+  <div id="question_<%= q.index %>_div" data-type="questions" data-index="<%= q.index %>">
+    <hr/>
+    <div class="form-group <%= if q.errors[:text], do: "has-error" %>">
+      <%= label q, :text, "Question ##{q.index + 1}", class: "control-label" %>
+        <%= if q.model.id do %>
+          <div class="right"><label><%= checkbox q, :delete %> Delete?</label></div>
+        <% else %>
+          <a href="#" data-remove="#question_<%= q.index %>_div" class="right">Delete</a>
+        <% end %>
+      <%= text_input q, :text, class: "form-control" %>
+      <%= error_tag q, :text %>
+    </div>
+
+    <div id="question_<%= q.index %>_answers" data-index="<%= q.index %>">
+    <%= inputs_for q, :answers, fn a -> %>
+      <div id="question_<%= q.index %>_answer_<%= a.index %>_div" data-type="answers" data-index="<%= a.index %>">
+        <div class="form-group <%= if a.errors[:text], do: "has-error" %>">
+          <%= label a, :text, "Answer ##{a.index + 1}", class: "control-label" %>
+          <%= if a.model.id do %>
+            <div class="right"><label><%= checkbox a, :delete %> Delete?</label></div>
+          <% else %>
+            <a href="#" data-remove="#question_<%= q.index %>_answer_<%= a.index %>_div" class="right">Delete</a>
+          <% end %>
+          <div class="right"><label><%= checkbox a, :correct %> Correct</label></div>
+          <%= text_input a, :text, class: "form-control" %>
+          <%= error_tag a, :text %>
+        </div>
+      </div>
+    <% end %>
+    </div>
+
+    <a href="#" data-add="answer" data-parent="#question_<%= q.index %>_answers">Add answer</a>
+  </div>
+<% end %>
+</div>
+
+  <a href="#" data-add="question">Add question</a>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $(document).on("click", "a[data-remove]", function() {
+      if (confirm("Are you sure?")) {
+        $($(this).data("remove")).remove();
+      }
+      return false;
+    });
+
+    $(document).on("click", "a[data-add='answer']", function() {
+      var container = $($(this).data("parent"));
+      var lastAnswer = container.children("div[data-type='answers']:last");
+      var lastAnswerIndex = -1;
+      if (lastAnswer.length > 0) {
+        lastAnswerIndex = lastAnswer.data("index") || 0;
+      }
+      var answerIndex = lastAnswerIndex + 1;
+      var tpl = _.template($("#template-answer").html());
+      container.append(tpl({questionIdx: container.data("index"), answerIdx: answerIndex}));
+      return false;
+    });
+
+    $(document).on("click", "a[data-add='question']", function() {
+      var container = $("#questionsContainer");
+      var lastQuestion = container.children("div[data-type='questions']:last");
+      var lastQuestionIndex = -1;
+      if (lastQuestion.length > 0) {
+        lastQuestionIndex = lastQuestion.data("index") || 0;
+      }
+      var questionIndex = lastQuestionIndex + 1;
+      var tpl = _.template($("#template-question").html());
+      container.append(tpl({questionIdx: questionIndex}));
+      return false;
+    });
+  });
+</script>
+
+<script type="text/html" id="template-answer">
+  <div id="question_<%%= questionIdx %>_answer_<%%= answerIdx %>_div" data-type="answers" data-index="<%%= answerIdx %>">
+    <div class="form-group ">
+      <label class="control-label" for="test_questions_<%%= questionIdx %>_answers_<%%= answerIdx %>_text">Answer #<%%= answerIdx + 1 %></label>
+      <a href="#" data-remove="#question_<%%= questionIdx %>_answer_<%%= answerIdx %>_div" class="right">Delete</a>
+      <div class="checkbox right">
+        <label>
+          <input name="test[questions][<%%= questionIdx %>][answers][<%%= answerIdx %>][correct]" type="hidden" value="false">
+          <input id="test_questions_<%%= questionIdx %>_answers_<%%= answerIdx %>_correct" name="test[questions][<%%= questionIdx %>][answers][<%%= answerIdx %>][correct]" type="checkbox" value="true">
+          Correct
+        </label>
+      </div>
+      <input class="form-control" id="test_questions_<%%= questionIdx %>_answers_<%%= answerIdx %>_text" name="test[questions][<%%= questionIdx %>][answers][<%%= answerIdx %>][text]" type="text">
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/html" id="template-question">
+  <div id="question_<%%= questionIdx %>_div" data-type="questions" data-index="<%%= questionIdx %>">
+    <hr/>
+    <div class="form-group ">
+      <label class="control-label" for="test_questions_<%%= questionIdx %>_text">Question #<%%= questionIdx + 1 %></label>
+      <a href="#" data-remove="#question_<%%= questionIdx %>_div" class="right">Delete</a>
+      <input class="form-control" id="test_questions_<%%= questionIdx %>_text" name="test[questions][<%%= questionIdx %>][text]" type="text">
+    </div>
+
+    <div id="question_<%%= questionIdx %>_answers" data-index="<%%= questionIdx %>">
+    </div>
+
+    <a href="#" data-add="answer" data-parent="#question_<%%= questionIdx %>_answers">Add answer</a>
+  </div>
+</script>

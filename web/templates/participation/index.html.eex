@@ -1,0 +1,30 @@
+<h2>Listing participations</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Test</th>
+      <th>Valuation</th>
+      <th>Mark</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for participation <- @participations do %>
+    <tr>
+      <td><%= participation.test_id %></td>
+      <td><%= participation.evaluation %></td>
+      <td><%= participation.mark %></td>
+
+      <td class="text-right">
+        <%= link "Show", to: participation_path(@conn, :show, participation), class: "btn btn-default btn-xs" %>
+        <%= link "Edit", to: participation_path(@conn, :edit, participation), class: "btn btn-default btn-xs" %>
+        <%= link "Delete", to: participation_path(@conn, :delete, participation), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<a href="/">New participation</a>
