@@ -15,7 +15,7 @@ alias Exam.Test
 alias Exam.Question
 alias Exam.Answer
 
-test = Repo.insert! %Test{locale: "uk", category: "Geography", guide: "en-g8", name: "GENERAL SECTION"}
+test = Repo.insert! %Test{locale: "en", category: "Geography", guide: "en-g8", name: "GENERAL SECTION"}
 
 question = Repo.insert! %Question{test_id: test.id, text: "Which answer is correct?"}
 Repo.insert! %Answer{question_id: question.id, text: "Ukraine is in a third time zone", correct: false}
@@ -80,7 +80,7 @@ Repo.insert! %Answer{question_id: question.id, text: "Presidential elections in 
 Repo.insert! %Answer{question_id: question.id, text: "Ukraine's Parliament consists of 450 members", correct: true}
 
 
-test = Repo.insert! %Test{locale: "uk", category: "Geography", guide: "en-g8", name: "NATURAL CONDITIONS AND NATURAL RESOURCES"}
+test = Repo.insert! %Test{locale: "en", category: "Geography", guide: "en-g8", name: "NATURAL CONDITIONS AND NATURAL RESOURCES"}
 
 question = Repo.insert! %Question{test_id: test.id, text: "The oldest Archean and Proterozoic rocks composed of:"}
 Repo.insert! %Answer{question_id: question.id, text: "Black Sea basin", correct: false}
